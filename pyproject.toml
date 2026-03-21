@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=58"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -17,6 +17,9 @@ dependencies = [
 dev = [
   "pytest>=8,<9",
 ]
+test = [
+  "pytest>=8,<9",
+]
 
 [project.scripts]
 treasure-furnace = "treasure_forge:main"
@@ -29,4 +32,3 @@ include = ["adapters", "core"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-

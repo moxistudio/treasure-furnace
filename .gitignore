@@ -3,10 +3,10 @@ __pycache__/
 .coverage
 .venv/
 .venv_ssp/
+.venv_pkg/
 dist/
 build/
 *.egg-info/
 runtime_assets/
 generated/
-.tmp_runtime_assets/
-.tmp_runtime_assets_pack/
+.tmp_runtime_assets*/
