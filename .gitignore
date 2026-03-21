@@ -1,0 +1,12 @@
+.pytest_cache/
+__pycache__/
+.coverage
+.venv/
+.venv_ssp/
+dist/
+build/
+*.egg-info/
+runtime_assets/
+generated/
+.tmp_runtime_assets/
+.tmp_runtime_assets_pack/

@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "treasure-furnace"
+version = "0.1.0"
+description = "Standalone import, preview, install, and validation toolchain for HoluBot Treasures."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "httpx>=0.27,<1",
+  "PyYAML>=6,<7",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8,<9",
+]
+
+[project.scripts]
+treasure-furnace = "treasure_forge:main"
+
+[tool.setuptools]
+py-modules = ["treasure_forge", "pocket_manifest_builder"]
+
+[tool.setuptools.packages.find]
+include = ["adapters", "core"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+

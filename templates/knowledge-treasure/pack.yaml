@@ -1,0 +1,83 @@
+meta:
+  id: your-treasure-id
+  name: Knowledge Treasure Template
+  kind: treasure
+  version: 0.1.0
+  description: Template for Treasures that combine user input with local knowledge sources.
+  author: your-name
+  api_version: holubot.treasure/v1
+
+activation:
+  trigger_keywords:
+    - policy lookup
+    - knowledge answer
+    - reference search
+  intents:
+    - qa
+    - knowledge_lookup
+  hotpath_allowed: false
+  route_preference: nimbus
+
+skill:
+  entry: SKILL.md
+  source_type: template
+
+tools:
+  builtin:
+    - knowledge_search
+    - llm_call
+    - send_to_user
+  mcp_servers:
+    required: []
+    optional: []
+
+governance:
+  trust_level: confirm
+  forbidden_tools:
+    - shell_exec
+    - file_delete
+    - credential_access
+
+runtime:
+  kind: nimbus
+  steps:
+    - id: retrieve_context
+      action: knowledge_search
+      params:
+        query: "{task}"
+        top_k: 5
+      output: retrieve_context
+    - id: compose_answer
+      action: llm_call
+      depends_on:
+        - retrieve_context
+      params:
+        prompt: |
+          You are a knowledge-grounded Treasure.
+          User request:
+          {task}
+
+          Retrieved context:
+          {retrieve_context}
+
+          Requirements:
+          - answer directly
+          - cite key source titles when available
+          - clearly mark unknown points as "to-be-verified"
+        max_tokens: 600
+        temperature: 0.1
+      output: compose_answer
+    - id: reply
+      action: send_to_user
+      depends_on:
+        - compose_answer
+      params:
+        content: "{compose_answer}"
+
+knowledge:
+  enabled: true
+  source_dirs:
+    - knowledge
+    - source/references
+  retrieval_mode: on_demand
+

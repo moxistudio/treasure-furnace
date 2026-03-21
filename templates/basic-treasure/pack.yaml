@@ -1,0 +1,52 @@
+meta:
+  id: hello-treasure
+  name: Hello Treasure
+  kind: treasure
+  version: 0.1.0
+  description: Minimal starter package for treasure-furnace.
+  origin: template:basic
+  api_version: holubot.treasure/v1
+
+activation:
+  trigger_keywords:
+    - hello
+    - starter
+  intents:
+    - general
+  hotpath_allowed: false
+  route_preference: builtin
+
+skill:
+  entry: SKILL.md
+  source_name: SKILL.md
+
+tools:
+  builtin:
+    - llm_call
+    - send_to_user
+
+governance:
+  trust_level: auto
+  risk_flags: []
+  approval_required: false
+
+output_contract:
+  format: plain_text
+  max_tokens: 400
+  require_sources: false
+  allow_fallback: true
+  rules:
+    - 直接回答用户请求
+
+runtime:
+  kind: builtin
+  profile: general
+  steps:
+    - id: respond
+      action: llm_call
+      params:
+        prompt: |
+          请根据系统说明与用户输入给出直接回答。
+    - id: send
+      action: send_to_user
+

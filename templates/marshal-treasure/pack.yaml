@@ -1,0 +1,89 @@
+meta:
+  id: your-treasure-id
+  name: Marshal Treasure Template
+  kind: treasure
+  version: 0.1.0
+  description: Template for multi-step production Treasures with a marshal-style workflow.
+  author: your-name
+  api_version: holubot.treasure/v1
+
+activation:
+  trigger_keywords:
+    - weekly digest
+    - pipeline report
+    - produce summary
+  intents:
+    - reporting
+    - workflow
+  hotpath_allowed: false
+  route_preference: marshal
+
+skill:
+  entry: SKILL.md
+  source_type: template
+
+tools:
+  builtin:
+    - query_work_logs
+    - llm_call
+    - send_to_user
+  mcp_servers:
+    required: []
+    optional: []
+
+governance:
+  trust_level: confirm
+  forbidden_tools:
+    - shell_exec
+    - file_delete
+    - credential_access
+
+runtime:
+  kind: marshal
+  steps:
+    - id: collect_inputs
+      action: query_work_logs
+      params:
+        week: ""
+      output: collect_inputs
+    - id: build_outline
+      action: llm_call
+      depends_on:
+        - collect_inputs
+      params:
+        prompt: |
+          Build a concise report outline from the material below.
+          User request:
+          {task}
+
+          Work logs:
+          {collect_inputs}
+
+          Output sections:
+          - key outcomes
+          - in-progress items
+          - risks
+          - next actions
+        max_tokens: 700
+        temperature: 0.15
+      output: build_outline
+    - id: finalize_report
+      action: llm_call
+      depends_on:
+        - build_outline
+      params:
+        prompt: |
+          Convert the outline into a clear report for decision-makers.
+          Keep each section short and actionable.
+          Outline:
+          {build_outline}
+        max_tokens: 900
+        temperature: 0.2
+      output: finalize_report
+    - id: reply
+      action: send_to_user
+      depends_on:
+        - finalize_report
+      params:
+        content: "{finalize_report}"
+
