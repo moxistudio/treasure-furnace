@@ -11,6 +11,12 @@ In P0, this repository focuses on the smallest useful public surface:
 
 This repository is for Treasure developers and migration work. It is not the HoluBot runtime itself.
 
+## Related Repositories
+
+- Treasure marketplace and official samples:
+  [`moxistudio/holubot-treasures`](https://github.com/moxistudio/holubot-treasures)
+- HoluBot runtime and demo integration remain in the main HoluBot repository.
+
 ## What It Contains
 
 - `treasure_forge.py`
